@@ -133,9 +133,13 @@ class aSort(Enum):
     mS = 4
 
 #filling tab
-def tabFill(arr, l=1000, v=100):
-    for i in range(0, l): #packing tab
-        arr.append(random.randrange(1, v)) #from 1 to valuemax
+def tabFill(arr, l=10, v=1, rand = True):
+    if rand == True: # filling with randoms
+        for i in range(0, l): #packing tab
+            arr.append(random.randrange(1, v)) #from 1 to valuemax
+    else:
+        for i in range(0, l): #packing tab 
+            arr.append(v)   
 
 
 #function measuring time of actions in parameters
@@ -185,21 +189,22 @@ def aClear(r, res, viS, vsS, vhS, vmS, vTime):
     del r
 
 #making graphs
-def plotting(viS,vsS,vhS,vmS,vTime, num):
-    plotnumber = 420 + num #for graphs arrangement
+def plotting(viS,vsS,vhS,vmS,vTime, num, title):
+    plotnumber = 0 + num #for graphs arrangement
     #linear
-    plot.subplot(plotnumber)
+    plot.subplot(7, 2, plotnumber)
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
+    plot.title(title)
     plot.xlabel('Sorts')
     plot.ylabel('time[s]')
     plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True)
 
     #logarithm
-    plot.subplot(plotnumber + 1)
+    plot.subplot(7,2,plotnumber + 1)
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.yscale('log')
-    plot.title('log')
+    plot.title(str(title + ' log'))
     plot.xlabel('Sorts')
     plot.ylabel('time[s]')
     plot.legend([ "iS","sS","hS","mS",])
@@ -222,7 +227,7 @@ def main():
     
     #loop of 1 sort settings
     startValue = 1000 #750 
-    endValue = 3000 #4600
+    endValue = 2000 #3000
     step = 100 #2  #50
     plot.figure()
 
@@ -246,9 +251,9 @@ def main():
         print("Filling, len of arr: ", len(r), " of ", endValue)
 
         for sort in (aSort):
-            print(sort.value, "-", sort)
+            #print(sort.value, "-", sort)
             t = mTime(r, sort)
-            print(sort.name,"  %s seconds " % (t))
+            #print(sort.name,"  %s seconds " % (t))
             iResults.append(t)
         results.append(iResults.copy())
         
@@ -259,7 +264,7 @@ def main():
 
     divresults(results, viS, vsS, vhS, vmS)
     
-    plotting(viS,vsS,vhS,vmS,vTime, 1)
+    plotting(viS,vsS,vhS,vmS,vTime, 1, "randoms")
 
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
@@ -285,9 +290,9 @@ def main():
         print("Filling, len of arr: ", len(r), " of ", endValue)
         mS(r) #here's the difference
         for sort in (aSort):
-            print(sort.value, "-", sort)
+            #print(sort.value, "-", sort)
             t = mTime(r, sort)
-            print(sort.name,"  %s seconds " % (t))
+            #print(sort.name,"  %s seconds " % (t))
             iResults.append(t)
         results.append(iResults.copy())
         
@@ -297,7 +302,7 @@ def main():
 
     divresults(results, viS, vsS, vhS, vmS)
 
-    plotting(viS,vsS,vhS,vmS,vTime, 3)
+    plotting(viS,vsS,vhS,vmS,vTime, 5, "sorted asc")
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
@@ -319,9 +324,9 @@ def main():
         print("Filling, len of arr: ", len(r), " of ", endValue)
         r.sort(reverse=True) #and here's the difference
         for sort in (aSort):
-            print(sort.value, "-", sort)
+            #print(sort.value, "-", sort)
             t = mTime(r, sort)
-            print(sort.name,"  %s seconds " % (t))
+            #print(sort.name,"  %s seconds " % (t))
             iResults.append(t)
         results.append(iResults.copy())
         
@@ -331,14 +336,52 @@ def main():
 
     divresults(results, viS, vsS, vhS, vmS)
 
-    plotting(viS,vsS,vhS,vmS,vTime, 5)
+    plotting(viS,vsS,vhS,vmS,vTime, 9, "sorted desc")
+
+    aClear(r, results, viS, vsS, vhS, vmS, vTime)
+
+######## for const ##########
+    r = []
+    results = []
+    viS = []
+    vsS = []
+    vhS = []
+    vmS = []
+    vTime = []
+    tabFill(r, startValue, v)
+    print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
+
+    for i in range(startValue, endValue, step):
+        vTime.append(i)
+        iResults = []
+        tabFill(r, step, v, False)
+        print("Filling, len of arr: ", len(r), " of ", endValue)
+        r.sort(reverse=True) #and here's the difference
+        for sort in (aSort):
+            #print(sort.value, "-", sort)
+            t = mTime(r, sort)
+            #print(sort.name,"  %s seconds " % (t))
+            iResults.append(t)
+        results.append(iResults.copy())
+        
+        iResults.clear()
+
+        print("end of this iteration \n")
+
+    divresults(results, viS, vsS, vhS, vmS)
+
+    plotting(viS,vsS,vhS,vmS,vTime, 13, "const")
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
 
+
     plot.show()
 
-
+    r = []
+    #test
+    tabFill(r, 10, 1, False)
+    print(r)
 
 if __name__ == "__main__":
     main()
