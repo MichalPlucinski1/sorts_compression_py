@@ -174,34 +174,58 @@ def divresults(res, viS, vsS, vhS, vmS):
         vhS.append(i[2])
         vmS.append(i[3])
 
+#clearing
+def aClear(r, res, viS, vsS, vhS, vmS, vTime):
+    del res
+    del viS 
+    del vsS
+    del vhS
+    del vmS
+    del vTime
+    del r
+
 #making graphs
-def plotting(viS,vsS,vhS,vmS,vTime):
-    plot.figure()
+def plotting(viS,vsS,vhS,vmS,vTime, num):
+    plotnumber = 420 + num #for graphs arrangement
+    #linear
+    plot.subplot(plotnumber)
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.xlabel('Sorts')
     plot.ylabel('time[s]')
     plot.legend([ "iS","sS","hS","mS",])
-    plot.show()
+    plot.grid(True)
 
-#logarithm plot
-def logPlot(viS,vsS,vhS,vmS,vTime):
+    #logarithm
+    plot.subplot(plotnumber + 1)
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.yscale('log')
     plot.title('log')
+    plot.xlabel('Sorts')
+    plot.ylabel('time[s]')
+    plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True) 
-    plot.show()
+    
 
 
-#############################main#############################
+
+############################# main #############################
 
 def main():
     programStart()
+    
 
     #array settings
     r = []
     #l = 5000 #length of array  # overwritten by 
     v = 150 #max value in array
-    #tabFill(r, l, v) #(arr, len, val)
+
+    
+    #loop of 1 sort settings
+    startValue = 1000 #750 
+    endValue = 3000 #4600
+    step = 100 #2  #50
+    plot.figure()
+
 
     #bufored times
     results = []
@@ -211,18 +235,15 @@ def main():
     vmS = []
     vTime = []
 
-    #loop of 1 sort settings
-    startValue = 1000 #750 
-    endValue = 3000 #4600
-    step = 5 #2
     tabFill(r, startValue, v)
     print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
 
+    ######## for random ##########
     for i in range(startValue, endValue, step):
-        vTime.append(i)
-        iResults = []
-        tabFill(r, step, v)
-        print("Filling, len of arr: ", len(r))
+        vTime.append(i) #making y dimmension for plot
+        iResults = [] #iteration results in form [iS, sS, hS, mS]
+        tabFill(r, step, v) #increasing list size by quant. of step random elements
+        print("Filling, len of arr: ", len(r), " of ", endValue)
 
         for sort in (aSort):
             print(sort.value, "-", sort)
@@ -237,23 +258,85 @@ def main():
     #print(results)
 
     divresults(results, viS, vsS, vhS, vmS)
-
-    plotting(viS,vsS,vhS,vmS,vTime)
-
-    logPlot(viS,vsS,vhS,vmS,vTime)
-
-
     
-    """
-    for sort in (aSort):
+    plotting(viS,vsS,vhS,vmS,vTime, 1)
+
+
+    aClear(r, results, viS, vsS, vhS, vmS, vTime)
+
+
+
+
+    ######## for sorted asc ##########
+    r = []
+    results = []
+    viS = []
+    vsS = []
+    vhS = []
+    vmS = []
+    vTime = []
+    tabFill(r, startValue, v)
+    print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
+
+    for i in range(startValue, endValue, step):
+        vTime.append(i)
+        iResults = []
+        tabFill(r, step, v)
+        print("Filling, len of arr: ", len(r), " of ", endValue)
+        mS(r) #here's the difference
+        for sort in (aSort):
+            print(sort.value, "-", sort)
+            t = mTime(r, sort)
+            print(sort.name,"  %s seconds " % (t))
+            iResults.append(t)
+        results.append(iResults.copy())
         
-        print(sort.value, "-", sort)
-        t = mTime(r, sort)
-        print(sort.name,"  %s seconds " % (t))
-    
-    s2 = aSort.hS
-    print(s2)
-    """
+        iResults.clear()
+
+        print("end of this iteration \n")
+
+    divresults(results, viS, vsS, vhS, vmS)
+
+    plotting(viS,vsS,vhS,vmS,vTime, 3)
+
+    aClear(r, results, viS, vsS, vhS, vmS, vTime)
+
+######## for sorted desc ##########
+    r = []
+    results = []
+    viS = []
+    vsS = []
+    vhS = []
+    vmS = []
+    vTime = []
+    tabFill(r, startValue, v)
+    print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
+
+    for i in range(startValue, endValue, step):
+        vTime.append(i)
+        iResults = []
+        tabFill(r, step, v)
+        print("Filling, len of arr: ", len(r), " of ", endValue)
+        r.sort(reverse=True) #and here's the difference
+        for sort in (aSort):
+            print(sort.value, "-", sort)
+            t = mTime(r, sort)
+            print(sort.name,"  %s seconds " % (t))
+            iResults.append(t)
+        results.append(iResults.copy())
+        
+        iResults.clear()
+
+        print("end of this iteration \n")
+
+    divresults(results, viS, vsS, vhS, vmS)
+
+    plotting(viS,vsS,vhS,vmS,vTime, 5)
+
+    aClear(r, results, viS, vsS, vhS, vmS, vTime)
+
+
+    plot.show()
 
 
 
