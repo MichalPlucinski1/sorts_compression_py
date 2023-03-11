@@ -26,8 +26,6 @@ def tabFill(arr, l=1000, v=100):
 
 #function measuring time of actions in parameters
 def mTime(arr, sort: aSort):
-    print(sort)
-    print(sort == aSort.iS)
     if sort == aSort.iS:
         start_time = time.time()
         iS(arr.copy())
@@ -167,22 +165,45 @@ def mS(arr):
 
 def main():
     programStart()
+
+    #array settings
     r = []
-    l = 5000 #length of array
+    #l = 5000 #length of array  # overwritten by 
     v = 150 #max value in array
-    n = 5 #how much reapets for each sort
-    tabFill(r, l, v) #(arr, len, val)
 
+    
+    #tabFill(r, l, v) #(arr, len, val)
 
+    #loop of 1 sort settings
+    startValue = 1000
+    endValue = 5000
+    step = 1000
+    print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
+
+    for i in range(startValue, endValue, step):
+        tabFill(r, step, v)
+        print("Filling, len of arr: ", len(r))
+        
+        for sort in (aSort):
+            print(sort.value, "-", sort)
+            t = mTime(r, sort)
+            print(sort.name,"  %s seconds " % (t))
+
+        print("end of this iteration \n")
+        
+        
+    """
     for sort in (aSort):
         
         print(sort.value, "-", sort)
         t = mTime(r, sort)
         print(sort.name,"  %s seconds " % (t))
-
+    
     s2 = aSort.hS
     print(s2)
+    """
+
+
 if __name__ == "__main__":
     main()
-
 
