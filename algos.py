@@ -183,6 +183,14 @@ def plotting(viS,vsS,vhS,vmS,vTime):
     plot.legend([ "iS","sS","hS","mS",])
     plot.show()
 
+#logarithm plot
+def logPlot(viS,vsS,vhS,vmS,vTime):
+    plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
+    plot.yscale('log')
+    plot.title('log')
+    plot.grid(True) 
+    plot.show()
+
 
 #############################main#############################
 
@@ -204,9 +212,10 @@ def main():
     vTime = []
 
     #loop of 1 sort settings
-    startValue = 500
-    endValue = 2000
-    step = 2
+    startValue = 1000 #750 
+    endValue = 3000 #4600
+    step = 5 #2
+    tabFill(r, startValue, v)
     print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
 
     for i in range(startValue, endValue, step):
@@ -231,6 +240,10 @@ def main():
 
     plotting(viS,vsS,vhS,vmS,vTime)
 
+    logPlot(viS,vsS,vhS,vmS,vTime)
+
+
+    
     """
     for sort in (aSort):
         
