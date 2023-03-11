@@ -1,65 +1,12 @@
 import random
 import time
 from enum import Enum
+import numpy as np
+import matplotlib . pyplot as plot
+from matplotlib import gridspec
 
 
-def programStart():
-    for i in range(4):
-        print("---program start---")
-
-
-#enum for sorts
-class aSort(Enum):
-    iS = 1
-    sS = 2
-    hS = 3
-    mS = 4
-
-
-
-#filling tab
-def tabFill(arr, l=1000, v=100):
-    for i in range(0, l): #packing tab
-        arr.append(random.randrange(1, v)) #from 1 to valuemax
-
-
-
-#function measuring time of actions in parameters
-def mTime(arr, sort: aSort):
-    if sort == aSort.iS:
-        start_time = time.time()
-        iS(arr.copy())
-        stop_time = time.time() - start_time
-
-    elif sort == aSort.sS:
-        start_time = time.time()
-        sS(arr.copy())
-        stop_time = time.time() - start_time
-
-    elif sort == aSort.hS:
-        start_time = time.time()
-        hS(arr.copy())
-        stop_time = time.time() - start_time
-
-    elif sort == aSort.mS:
-        start_time = time.time()
-        hS(arr.copy())
-        stop_time = time.time() - start_time    
-
-    else:
-        print("bad sort")
-        return 0
-    return stop_time
-
-
-#dividing resuilts for smaller tabs
-def divresults(res, viS, vsS, vhS, vmS):
-    for i in res:
-        viS.append(i[0])
-        vsS.append(i[1])
-        vhS.append(i[2])
-        vmS.append(i[3])
-
+#############################sorts#############################
 
 #Insertion Sort
 def iS(arr):
@@ -170,6 +117,74 @@ def mS(arr):
             j += 1
             k += 1
 
+#############################usage functions#############################
+
+#just separation from others entitis
+def programStart():
+    for i in range(4):
+        print("---program start---")
+
+
+#enum for sorts
+class aSort(Enum):
+    iS = 1
+    sS = 2
+    hS = 3
+    mS = 4
+
+#filling tab
+def tabFill(arr, l=1000, v=100):
+    for i in range(0, l): #packing tab
+        arr.append(random.randrange(1, v)) #from 1 to valuemax
+
+
+#function measuring time of actions in parameters
+def mTime(arr, sort: aSort):
+    if sort == aSort.iS:
+        start_time = time.time()
+        iS(arr.copy())
+        stop_time = time.time() - start_time
+
+    elif sort == aSort.sS:
+        start_time = time.time()
+        sS(arr.copy())
+        stop_time = time.time() - start_time
+
+    elif sort == aSort.hS:
+        start_time = time.time()
+        hS(arr.copy())
+        stop_time = time.time() - start_time
+
+    elif sort == aSort.mS:
+        start_time = time.time()
+        hS(arr.copy())
+        stop_time = time.time() - start_time    
+
+    else:
+        print("bad sort")
+        return 0
+    return stop_time
+
+
+#dividing resuilts for smaller tabs
+def divresults(res, viS, vsS, vhS, vmS):
+    for i in res:
+        viS.append(i[0])
+        vsS.append(i[1])
+        vhS.append(i[2])
+        vmS.append(i[3])
+
+#making graphs
+def plotting(viS,vsS,vhS,vmS,vTime):
+    plot.figure()
+    plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
+    plot.xlabel('Sorts')
+    plot.ylabel('time[s]')
+    plot.legend([ "iS","sS","hS","mS",])
+    plot.show()
+
+
+#############################main#############################
 
 def main():
     programStart()
@@ -189,12 +204,13 @@ def main():
     vTime = []
 
     #loop of 1 sort settings
-    startValue = 1000
-    endValue = 6000
-    step = 1000
+    startValue = 500
+    endValue = 2000
+    step = 2
     print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
 
     for i in range(startValue, endValue, step):
+        vTime.append(i)
         iResults = []
         tabFill(r, step, v)
         print("Filling, len of arr: ", len(r))
@@ -213,6 +229,7 @@ def main():
 
     divresults(results, viS, vsS, vhS, vmS)
 
+    plotting(viS,vsS,vhS,vmS,vTime)
 
     """
     for sort in (aSort):
