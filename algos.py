@@ -52,6 +52,15 @@ def mTime(arr, sort: aSort):
     return stop_time
 
 
+#dividing resuilts for smaller tabs
+def divresults(res, viS, vsS, vhS, vmS):
+    for i in res:
+        viS.append(i[0])
+        vsS.append(i[1])
+        vhS.append(i[2])
+        vmS.append(i[3])
+
+
 #Insertion Sort
 def iS(arr):
     # Traverse through 1 to len(arr)
@@ -119,7 +128,6 @@ def hS(arr):
         arr[i], arr[0] = arr[0], arr[i]  # swap
         heapify(arr, i, 0)
 
-
 # Merge Sort
 def mS(arr):
     if len(arr) > 1:
@@ -170,28 +178,42 @@ def main():
     r = []
     #l = 5000 #length of array  # overwritten by 
     v = 150 #max value in array
-
-    
     #tabFill(r, l, v) #(arr, len, val)
+
+    #bufored times
+    results = []
+    viS = []
+    vsS = []
+    vhS = []
+    vmS = []
+    vTime = []
 
     #loop of 1 sort settings
     startValue = 1000
-    endValue = 5000
+    endValue = 6000
     step = 1000
     print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
 
     for i in range(startValue, endValue, step):
+        iResults = []
         tabFill(r, step, v)
         print("Filling, len of arr: ", len(r))
-        
+
         for sort in (aSort):
             print(sort.value, "-", sort)
             t = mTime(r, sort)
             print(sort.name,"  %s seconds " % (t))
+            iResults.append(t)
+        results.append(iResults.copy())
+        
+        iResults.clear()
 
         print("end of this iteration \n")
-        
-        
+    #print(results)
+
+    divresults(results, viS, vsS, vhS, vmS)
+
+
     """
     for sort in (aSort):
         
@@ -202,6 +224,7 @@ def main():
     s2 = aSort.hS
     print(s2)
     """
+
 
 
 if __name__ == "__main__":
