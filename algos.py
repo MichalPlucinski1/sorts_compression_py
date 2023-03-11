@@ -1,10 +1,57 @@
 import random
 import time
+from enum import Enum
+
+
+def programStart():
+    for i in range(4):
+        print("---program start---")
+
+
+#enum for sorts
+class aSort(Enum):
+    iS = 1
+    sS = 2
+    hS = 3
+    mS = 4
+
+
 
 #filling tab
-def tabFill(arr, quantitymax=1000, valuemax=100):
-    for i in range(0, quantitymax): #packing tab
-        arr.append(random.randrange(1, valuemax)) #from 1 to valuemax
+def tabFill(arr, l=1000, v=100):
+    for i in range(0, l): #packing tab
+        arr.append(random.randrange(1, v)) #from 1 to valuemax
+
+
+
+#function measuring time of actions in parameters
+def mTime(arr, sort: aSort):
+    print(sort)
+    print(sort == aSort.iS)
+    if sort == aSort.iS:
+        start_time = time.time()
+        iS(arr.copy())
+        stop_time = time.time() - start_time
+
+    elif sort == aSort.sS:
+        start_time = time.time()
+        sS(arr.copy())
+        stop_time = time.time() - start_time
+
+    elif sort == aSort.hS:
+        start_time = time.time()
+        hS(arr.copy())
+        stop_time = time.time() - start_time
+
+    elif sort == aSort.mS:
+        start_time = time.time()
+        hS(arr.copy())
+        stop_time = time.time() - start_time    
+
+    else:
+        print("bad sort")
+        return 0
+    return stop_time
 
 
 #Insertion Sort
@@ -38,7 +85,7 @@ def sS(arr):
         # the first element
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
 
-# Heap Sort
+# Heap Sort (auxiliary function)
 def heapify(arr, N, i):
     largest = i  # Initialize largest as root
     l = 2 * i + 1  # left = 2*i + 1
@@ -61,11 +108,8 @@ def heapify(arr, N, i):
         # Heapify the root.
         heapify(arr, N, largest)
 
-
-# The main function to sort an array of given size
-
-
-def heapSort(arr):
+# Heap Sort (main hS function)
+def hS(arr):
     N = len(arr)
 
     # Build a maxheap.
@@ -79,33 +123,65 @@ def heapSort(arr):
 
 
 # Merge Sort
+def mS(arr):
+    if len(arr) > 1:
+  
+         # Finding the mid of the array
+        mid = len(arr)//2
+  
+        # Dividing the array elements
+        L = arr[:mid]
+  
+        # into 2 halves
+        R = arr[mid:]
+  
+        # Sorting the first half
+        mS(L)
+  
+        # Sorting the second half
+        mS(R)
+  
+        i = j = k = 0
+  
+        # Copy data to temp arrays L[] and R[]
+        while i < len(L) and j < len(R):
+            if L[i] <= R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+  
+        # Checking if any element was left
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+  
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+
+
 def main():
-
+    programStart()
     r = []
-
-    tabFill(r, 1000, 150)
-
-    start_time = time.time()
-    sS(r.copy())
-    stop_time = time.time() - start_time
+    l = 5000 #length of array
+    v = 150 #max value in array
+    n = 5 #how much reapets for each sort
+    tabFill(r, l, v) #(arr, len, val)
 
 
+    for sort in (aSort):
+        
+        print(sort.value, "-", sort)
+        t = mTime(r, sort)
+        print(sort.name,"  %s seconds " % (t))
 
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-
-
-    start_time = time.time()
-    iS(r.copy())
-    stop_time = time.time() - start_time
-
-
-
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-
-
-
+    s2 = aSort.hS
+    print(s2)
 if __name__ == "__main__":
     main()
 
