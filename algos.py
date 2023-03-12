@@ -3,7 +3,6 @@ import time
 from enum import Enum
 import numpy as np
 import matplotlib . pyplot as plot
-from matplotlib import gridspec
 
 
 #############################sorts#############################
@@ -119,7 +118,7 @@ def mS(arr):
 
 #############################usage functions#############################
 
-#just separation from others entitis
+#just separation from other entitis
 def programStart():
     for i in range(4):
         print("---program start---")
@@ -192,7 +191,7 @@ def aClear(r, res, viS, vsS, vhS, vmS, vTime):
 def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plotnumber = 0 + num #for graphs arrangement
     #linear
-    plot.subplot(7, 2, plotnumber)
+    plot.subplot(9, 2, plotnumber)
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.title(title)
     plot.xlabel('number of sorts')
@@ -201,7 +200,7 @@ def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plot.grid(True)
 
     #logarithm
-    plot.subplot(7,2,plotnumber + 1)
+    plot.subplot(9,2,plotnumber + 1)
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.yscale('log')
     plot.title(str(title + ' log'))
@@ -210,6 +209,20 @@ def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True) 
     
+
+#generating v-shaped
+def vSFillTab(l, low_num_tabs):
+    for i in range(1,low_num_tabs,2):
+        l.append(i)
+        l.insert(0, i+1)
+
+#updating v-shaped
+def vSAddToTab(l, step):
+     step = int(step/2)
+     for i in range(step):
+        first_num = l[0]
+        l.append(first_num+1)
+        l.insert(0, first_num + 2)
 
 
 
@@ -374,14 +387,41 @@ def main():
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
+######## for v-shaped ##########
+
+    r = []
+    results = []
+    viS = []
+    vsS = []
+    vhS = []
+    vmS = []
+    vTime = []
+    vSFillTab(r, startValue)
+    print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
+    for i in range(startValue, endValue, step):
+        vTime.append(i)
+        iResults = []
+        for sort in (aSort):
+            #print(sort.value, "-", sort)
+            t = mTime(r, sort)
+            #print(sort.name,"  %s seconds " % (t))
+            iResults.append(t)
+        results.append(iResults.copy())
+        
+        iResults.clear()
+        print("Filling, len of arr: ", len(r), " of ", endValue)
+        vSAddToTab(r, step)
+
+    divresults(results, viS, vsS, vhS, vmS)
+
+    plotting(viS,vsS,vhS,vmS,vTime, 17, "v-shaped")
+
+    aClear(r, results, viS, vsS, vhS, vmS, vTime)
+
+
 
 
     plot.show()
-
-    r = []
-    #test
-    tabFill(r, 10, 1, False)
-    print(r)
 
 if __name__ == "__main__":
     main()
