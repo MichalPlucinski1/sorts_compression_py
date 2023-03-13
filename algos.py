@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib . pyplot as plot
 
 
-#############################sorts#############################
+############################# sorts #############################
 
 #Insertion Sort
 def iS(arr):
@@ -116,7 +116,7 @@ def mS(arr):
             j += 1
             k += 1
 
-#############################usage functions#############################
+############################# usage functions #############################
 
 #just separation from other entitis
 def programStart():
@@ -256,7 +256,7 @@ def main():
     tabFill(r, startValue, v)
     print("startValue: ", startValue, " endValue: ", endValue, " with step: ", step)
 
-    ######## for random ##########
+    ################### for random ###################
     for i in range(startValue, endValue, step):
         vTime.append(i) #making y dimmension for plot
         iResults = [] #iteration results in form [iS, sS, hS, mS]
@@ -275,7 +275,7 @@ def main():
         print("end of this iteration \n")
     #print(results)
 
-    divresults(results, viS, vsS, vhS, vmS)
+    divresults(results, viS, vsS, vhS, vmS) #dividing results into results per sort
     
     plotting(viS,vsS,vhS,vmS,vTime, 1, "randoms")
 
@@ -285,7 +285,7 @@ def main():
 
 
 
-    ######## for sorted asc ##########
+    ################### for sorted asc ###################
     r = []
     results = []
     viS = []
@@ -319,7 +319,8 @@ def main():
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
-######## for sorted desc ##########
+    ################### for sorted desc ###################
+
     r = []
     results = []
     viS = []
@@ -353,7 +354,7 @@ def main():
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
-######## for const ##########
+    ################### for const ###################
     r = []
     results = []
     viS = []
@@ -387,7 +388,7 @@ def main():
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
-######## for v-shaped ##########
+    ################### for v-shaped ###################
 
     r = []
     results = []
@@ -418,6 +419,7 @@ def main():
 
     aClear(r, results, viS, vsS, vhS, vmS, vTime)
 
+    ################### all sorts passed ###################
 
 
 
@@ -426,3 +428,15 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+
+"""
+how to implement avg 
+we wanna improve quality of results by making several (ultimately 15) tries and take avg of the measurments
+for this code probably it would be best to make all tests for 1 type of tab, then retake it.
+ So maybe list of results for every sort should be multidimensial vsS[[values in 1-st attempt], [values of 2'nd], ..., [value of 15'th attempt]]
+ then we must make another list, which n-th element will be the avg of n-th elements of every attempt
+
+
+ question is: making avg of sorting one tab, or sorting different data's but with same amount?
+"""
