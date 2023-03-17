@@ -3,6 +3,12 @@ import time
 from enum import Enum
 import numpy as np
 import matplotlib . pyplot as plot
+import sys
+import threading
+
+threading.stack_size(67108864)
+sys.setrecursionlimit(2 ** 20)
+
 
 
 ############################# sorts #############################
@@ -143,29 +149,32 @@ def tabFill(arr, l=10, v=1, rand = True):
 
 #function measuring time of actions in parameters
 def mTime(arr, sort: aSort):
-    if sort == aSort.iS:
-        start_time = time.time()
-        iS(arr.copy())
-        stop_time = time.time() - start_time
+    avg = 0
+    iterations = 3
+    for i in range(iterations):
+        if sort == aSort.iS:
+            start_time = time.time()
+            iS(arr.copy())
+            stop_time = time.time() - start_time
 
-    elif sort == aSort.sS:
-        start_time = time.time()
-        sS(arr.copy())
-        stop_time = time.time() - start_time
+        elif sort == aSort.sS:
+            start_time = time.time()
+            sS(arr.copy())
+            stop_time = time.time() - start_time
 
-    elif sort == aSort.hS:
-        start_time = time.time()
-        hS(arr.copy())
-        stop_time = time.time() - start_time
+        elif sort == aSort.hS:
+            start_time = time.time()
+            hS(arr.copy())
+            stop_time = time.time() - start_time
 
-    elif sort == aSort.mS:
-        start_time = time.time()
-        hS(arr.copy())
-        stop_time = time.time() - start_time    
+        elif sort == aSort.mS:
+            start_time = time.time()
+            hS(arr.copy())
+            stop_time = time.time() - start_time   
 
-    else:
-        print("bad sort")
-        return 0
+        avg += stop_time 
+
+    stop_time = avg/iterations
     return stop_time
 
 
@@ -191,7 +200,7 @@ def aClear(r, res, viS, vsS, vhS, vmS, vTime):
 def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plotnumber = 0 + num #for graphs arrangement
     #linear
-    plot.subplot(9, 2, plotnumber)
+    plot.figure()
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.title(title)
     plot.xlabel('number of sorts')
@@ -199,8 +208,9 @@ def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True)
 
+    plot.show()
     #logarithm
-    plot.subplot(9,2,plotnumber + 1)
+    plot.figure()
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
     plot.yscale('log')
     plot.title(str(title + ' log'))
@@ -208,6 +218,8 @@ def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plot.ylabel('time[s]')
     plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True) 
+    plot.show()
+
     
 
 #generating v-shaped
@@ -241,7 +253,7 @@ def main():
     #loop of 1 sort settings
     startValue = 1000 #750 
     endValue = 2000 #3000
-    step = 100 #2  #50
+    step = 75 #2  #50
     plot.figure()
 
 
@@ -423,10 +435,13 @@ def main():
 
 
 
-    plot.show()
+    #plot.show()
 
 if __name__ == "__main__":
-    main()
+    
+    thread = threading.Thread(target=main) 
+    thread.start()
+    #main()
 
 
 
