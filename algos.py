@@ -6,7 +6,7 @@ import matplotlib . pyplot as plot
 import sys
 import threading
 
-threading.stack_size(67108864)
+threading.stack_size(67108864) #64MB
 sys.setrecursionlimit(2 ** 20)
 
 
@@ -139,18 +139,19 @@ class aSort(Enum):
 
 #filling tab
 def tabFill(arr, l=10, v=1, rand = True):
+    append = arr.append
     if rand == True: # filling with randoms
         for i in range(0, l): #packing tab
-            arr.append(random.randrange(1, v)) #from 1 to valuemax
+            append(random.randrange(1, v)) #from 1 to valuemax
     else:
         for i in range(0, l): #packing tab 
-            arr.append(v)   
+            append(v)   
 
 
 #function measuring time of actions in parameters
 def mTime(arr, sort: aSort):
     avg = 0
-    iterations = 3
+    iterations = repetitions
     for i in range(iterations):
         if sort == aSort.iS:
             start_time = time.time()
@@ -208,7 +209,6 @@ def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True)
 
-    plot.show()
     #logarithm
     plot.figure()
     plot.plot(vTime, viS, vTime, vsS, vTime, vhS, vTime, vmS)
@@ -218,7 +218,6 @@ def plotting(viS,vsS,vhS,vmS,vTime, num, title):
     plot.ylabel('time[s]')
     plot.legend([ "iS","sS","hS","mS",])
     plot.grid(True) 
-    plot.show()
 
     
 
@@ -254,7 +253,8 @@ def main():
     startValue = 1000 #750 
     endValue = 2000 #3000
     step = 75 #2  #50
-    plot.figure()
+    global repetitions
+    repetitions= 10 #to generate avg
 
 
     #bufored times
@@ -435,23 +435,11 @@ def main():
 
 
 
-    #plot.show()
+    plot.show()
+    return 0
 
 if __name__ == "__main__":
     
     thread = threading.Thread(target=main) 
     thread.start()
     #main()
-
-
-
-"""
-how to implement avg 
-we wanna improve quality of results by making several (ultimately 15) tries and take avg of the measurments
-for this code probably it would be best to make all tests for 1 type of tab, then retake it.
- So maybe list of results for every sort should be multidimensial vsS[[values in 1-st attempt], [values of 2'nd], ..., [value of 15'th attempt]]
- then we must make another list, which n-th element will be the avg of n-th elements of every attempt
-
-
- question is: making avg of sorting one tab, or sorting different data's but with same amount?
-"""
